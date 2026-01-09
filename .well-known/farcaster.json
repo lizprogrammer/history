@@ -1,0 +1,23 @@
+{
+  "frame": {
+    "name": "On This Day",
+    "version": "1",
+    "iconUrl": "https://on-this-day-one.vercel.app/icon.png",
+    "homeUrl": "https://on-this-day-one.vercel.app",
+    "imageUrl": "https://on-this-day-one.vercel.app/splash.png",
+    "buttonTitle": "Open History",
+    "splashImageUrl": "https://on-this-day-one.vercel.app/splash.png",
+    "splashBackgroundColor": "#1e3a8a",
+    "webhookUrl": "https://on-this-day-one.vercel.app/api/history",
+    "subtitle": "On this day...",
+    "description": "On this day in history",
+    "primaryCategory": "social",
+    "ogTitle": "On this day...",
+    "ogImageUrl": "https://on-this-day-one.vercel.app/icon.png"
+  },
+  "accountAssociation": {
+    "header": "eyJmaWQiOjIxMDI1OSwidHlwZSI6ImF1dGgiLCJrZXkiOiIweDdEY2M5NkZGQmFGRjg1NUJjNzRiZkM4RDY2RDk5ODE0RDFCMkQ1ZDQifQ",
+    "payload": "eyJkb21haW4iOiJvbi10aGlzLWRheS1vbmUudmVyY2VsLmFwcCJ9",
+    "signature": "qjGJrfDck+N8Mxx1aCxCvbIowNALY7mdxZst2zJzl1Uk7mer23RhJ5CEl4ub8F/n1j4QcnmkZ8TqsekC5jUERRw="
+  }
+}
