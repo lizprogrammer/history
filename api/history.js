@@ -14,26 +14,31 @@ export default async function handler(req, res) {
     const month = today.toLocaleString('en-US', { month: 'long' });
     const day = today.getDate();
 
-    // Call Claude API to get historical events
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
+    // --- CALL OPENAI INSTEAD OF ANTHROPIC ---
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01'
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1024,
-        messages: [{
-          role: 'user',
-          content: `Give me 3 interesting historical events that happened on ${month} ${day}. Format each as: "YEAR: Brief description (1-2 sentences)". Make them diverse and fascinating. Include different types of events (science, politics, culture, sports, etc.). Each time give me DIFFERENT events - be creative and find lesser-known interesting facts!`
-        }]
-      })
+        model: "gpt-4o-mini",
+        max_tokens: 300,
+        temperature: 0.9,
+        messages: [
+          {
+            role: "user",
+            content: `Give me 3 interesting historical events that happened on ${month} ${day}. Format each as: "YEAR: Brief description (1-2 sentences)". Make them diverse and fascinating. Include different types of events (science, politics, culture, sports, etc.). Each time give me DIFFERENT events - be creative and find lesser-known interesting facts!`
+          }
+        ]
+      }),
     });
 
     const data = await response.json();
-    const historyText = data.content[0].text;
+
+    const historyText =
+      data?.choices?.[0]?.message?.content?.trim() ||
+      "No history available today.";
 
     // Generate image with the history text
     const imageUrl = await generateHistoryImage(historyText, month, day);
@@ -59,7 +64,7 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('Error:', error);
-    
+
     const errorHtml = `
 <!DOCTYPE html>
 <html>
@@ -78,12 +83,8 @@ export default async function handler(req, res) {
 }
 
 async function generateHistoryImage(text, month, day) {
-  // Create a simple image using a service or return a pre-made image
-  // For now, we'll create a dynamic OG image URL
   const encodedText = encodeURIComponent(text);
   const title = encodeURIComponent(`${month} ${day} in History`);
-  
-  // You can use a service like og-image or create your own image generation
-  // For simplicity, returning a placeholder that you'd replace with actual image generation
+
   return `https://og-image.vercel.app/${title}.png?theme=light&md=1&fontSize=75px&images=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Ffront%2Fassets%2Fdesign%2Fvercel-triangle-black.svg&widths=250&heights=250`;
 }
