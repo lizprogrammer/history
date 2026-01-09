@@ -1,12 +1,11 @@
-
 {
   "frame": {
     "name": "On This Day",
     "version": "1",
-    "iconUrl": "https://on-this-day-one.vercel.app/on-this-day.png",
+    "iconUrl": "https://on-this-day-one.vercel.app/splash.png",
     "homeUrl": "https://on-this-day-one.vercel.app",
-    "imageUrl": "https://on-this-day-one.vercel.app/on-this-day.png",
-    "splashImageUrl": "https://on-this-day-one.vercel.app/on-this-day.png",
+    "imageUrl": "https://on-this-day-one.vercel.app/splash.png",
+    "splashImageUrl": "https://on-this-day-one.vercel.app/splash.png",
     "splashBackgroundColor": "#1e3a8a",
     "webhookUrl": "https://on-this-day-one.vercel.app/api/history",
     "subtitle": "On this day...",
