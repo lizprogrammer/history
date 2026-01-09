@@ -13,7 +13,13 @@
     "description": "On this day in history",
     "primaryCategory": "social",
     "ogTitle": "On this day...",
-    "ogImageUrl": "https://on-this-day-one.vercel.app/icon.png"
+    "ogImageUrl": "https://on-this-day-one.vercel.app/icon.png",
+    "heroImageUrl": "https://on-this-day-one.vercel.app/icon.png",
+    "tagline": "history",
+    "castShareUrl": "https://on-this-day-one.vercel.app/",
+    "screenshotUrls": [
+      "https://on-this-day-one.vercel.app/splash.png"
+    ]
   },
   "accountAssociation": {
     "header": "eyJmaWQiOjIxMDI1OSwidHlwZSI6ImF1dGgiLCJrZXkiOiIweDdEY2M5NkZGQmFGRjg1NUJjNzRiZkM4RDY2RDk5ODE0RDFCMkQ1ZDQifQ",
