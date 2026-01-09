@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>On This Day in History</title>
+
+  <!-- Farcaster Frame -->
+  <meta name="fc:miniapp" content='{
+    "version":"1",
+    "imageUrl":"https://your-app.vercel.app/icon.png",
+    "button":{
+      "title":"Discover History",
+      "action":{
+        "type":"launch_miniapp",
+        "name":"On This Day",
+        "url":"https://your-app.vercel.app",
+        "splashImageUrl":"https://your-app.vercel.app/splash.png",
+        "splashBackgroundColor":"#1e3a8a"
+      }
+    }
+  }' />
+
+  <meta name="fc:frame" content='{
+    "version":"1",
+    "imageUrl":"https://your-app.vercel.app/icon.png",
+    "button":{
+      "title":"Discover History",
+      "action":{
+        "type":"launch_frame",
+        "name":"On This Day",
+        "url":"https://your-app.vercel.app",
+        "splashImageUrl":"https://your-app.vercel.app/splash.png",
+        "splashBackgroundColor":"#1e3a8a"
+      }
+    }
+  }' />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="On This Day in History" />
+  <meta property="og:description" content="Discover fascinating historical events from today's date" />
+  <meta property="og:image" content="https://your-app.vercel.app/splash.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="On This Day in History" />
+  <meta name="twitter:description" content="Discover fascinating historical events from today's date" />
+  <meta name="twitter:image" content="https://your-app.vercel.app/splash.png" />
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: linear-gradient(135deg, #1e3a8a 0%, #312e81 100%);
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 120px;
+    }
+
+    .app {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px 20px;
+      text-align: center;
+    }
+
+    .logo {
+      margin-bottom: 12px;
+      font-size: 64px;
+    }
+
+    h1 {
+      font-weight: 700;
+      font-size: 1.8rem;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      opacity: 0.85;
+      margin-bottom: 24px;
+    }
+
+    .date-display {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(147, 197, 253, 0.3);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+      max-width: 360px;
+      width: 100%;
+    }
+
+    .date-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.7;
+      margin-bottom: 4px;
+      color: #93c5fd;
+    }
+
+    .date-value {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 14px 16px 18px;
+      background: linear-gradient(to top, rgba(49, 46, 129, 0.98) 70%, transparent);
+    }
+
+    button {
+      width: 100%;
+      max-width: 360px;
+      margin: 0 auto;
+      display: block;
+      background: #60a5fa;
+      color: #1e3a8a;
+      border: none;
+      border-radius: 999px;
+      padding: 14px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+
+    button:active { transform: scale(0.97); }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 100;
+    }
+
+    .overlay.show { display: flex; }
+
+    .history-card {
+      background: linear-gradient(180deg, #1e40af, #1e3a8a);
+      border-radius: 18px;
+      padding: 24px;
+      border: 2px solid rgba(147, 197, 253, 0.3);
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .history-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.7;
+      margin-bottom: 12px;
+      color: #93c5fd;
+    }
+
+    .events-container {
+      text-align: left;
+      line-height: 1.6;
+      white-space: pre-line;
+      color: #fff;
+    }
+
+    #error {
+      color: #fca5a5;
+      font-size: 0.85rem;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .close-btn {
+      background: rgba(96, 165, 250, 0.2);
+      color: #93c5fd;
+      margin-top: 16px;
+    }
+
+    .refresh-btn {
+      background: #60a5fa;
+      color: #1e3a8a;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <div class="logo">📅</div>
+    <h1>On This Day</h1>
+    <div class="subtitle">Discover fascinating moments in history</div>
+
+    <div class="date-display">
+      <div class="date-label">Today's Date</div>
+      <div class="date-value" id="todayDate"></div>
+    </div>
+  </div>
+
+  <div id="overlay" class="overlay">
+    <div class="history-card">
+      <div class="history-label">Historical Events</div>
+      <div id="events" class="events-container"></div>
+      <button class="refresh-btn" id="refreshBtn">🔄 More History!</button>
+      <button class="close-btn" onclick="document.getElementById('overlay').classList.remove('show')">Close</button>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <button id="discoverBtn">Discover History</button>
+    <div id="error"></div>
+  </div>
+
+  <script type="module">
+    import { sdk } from 'https://esm.sh/@farcaster/miniapp-sdk';
+    sdk.actions.ready();
+
+    // Display today's date
+    const today = new Date();
+    const dateStr = today.toLocaleDateString('en-US', { 
+      weekday: 'long', 
+      month: 'long', 
+      day: 'numeric',
+      year: 'numeric'
+    });
+    document.getElementById('todayDate').textContent = dateStr;
+
+    async function getHistory() {
+      const eventsEl = document.getElementById('events');
+      const overlay = document.getElementById('overlay');
+      const errorEl = document.getElementById('error');
+      const btn = document.getElementById('discoverBtn');
+      const refreshBtn = document.getElementById('refreshBtn');
+
+      eventsEl.textContent = 'Loading historical events...';
+      overlay.classList.add('show');
+      btn.disabled = true;
+      refreshBtn.disabled = true;
+      errorEl.textContent = '';
+
+      try {
+        const res = await fetch('/api/history');
+        const text = await res.text();
+        const data = JSON.parse(text);
+
+        if (data.events) {
+          eventsEl.textContent = data.events;
+        } else if (data.error) {
+          eventsEl.textContent = 'Error: ' + data.error;
+        } else {
+          eventsEl.textContent = 'No historical events found. Please try again!';
+        }
+      } catch (err) {
+        eventsEl.textContent = 'Oops! Something went wrong.';
+        errorEl.textContent = 'Error: ' + err.message;
+      } finally {
+        btn.disabled = false;
+        refreshBtn.disabled = false;
+      }
+    }
+
+    document.getElementById('discoverBtn').addEventListener('click', getHistory);
+    document.getElementById('refreshBtn').addEventListener('click', getHistory);
+
+    document.getElementById('overlay').addEventListener('click', e => {
+      if (e.target === e.currentTarget) {
+        e.currentTarget.classList.remove('show');
+      }
+    });
+  </script>
+</body>
+</html>
