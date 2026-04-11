@@ -14,15 +14,15 @@ export default async function handler(req, res) {
     const month = today.toLocaleString('en-US', { month: 'long' });
     const day = today.getDate();
 
-    // --- CALL OPENAI ---
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    // --- CALL GROQ INSTEAD OF OPENAI ---
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
+        model: "llama-3.3-70b-versatile",
         max_tokens: 300,
         temperature: 0.9,
         messages: [
@@ -44,7 +44,7 @@ export default async function handler(req, res) {
     const wantsJSON =
       req.headers.accept?.includes("application/json") ||
       req.headers["content-type"] === "application/json" ||
-      req.method === "GET"; // browser fetch('/api/history')
+      req.method === "GET";
 
     if (wantsJSON) {
       return res.status(200).json({ events: historyText });
